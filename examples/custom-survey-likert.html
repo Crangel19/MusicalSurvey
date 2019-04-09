@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>test likert</title>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-survey-likert.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var scale_1 = ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
+  var scale_2 = ["Extremely cold", "Moderately cold", "Slightly cold", "Neutral", "Slightly warm", "Moderately warm", "Extremely warm"];
+  var scale_3 = ["I strongly prefer white people to black people.", "I moderately prefer white people to black people.", "I slightly prefer white people to black people.", "I like white people and black people equally.", "I slightly prefer black people to white people.", "I moderately prefer black people to white people.", "I strongly prefer black people to white people."];
+
+  var timeline = [];
+
+  var likert_test = {
+    timeline: [
+      {
+      type: 'survey-likert',
+      questions: [{prompt: "I like vegetables.", labels: scale_1}, {prompt: "I like fruit.", labels: scale_2, required: false},
+      {prompt: "I like cars.", labels: scale_2}, {prompt: "I like girls.", labels: scale_1}],
+    },
+    {
+      type: 'survey-likert',
+      questions: [{prompt: "I like trains.", labels: scale_1}, {prompt: "I like bats.", labels: scale_2, required: false},
+      {prompt: "I like maars.", labels: scale_3}, {prompt: "I like boys.", labels: scale_1}],
+    }
+  ],
+  };
+  timeline.push(likert_test);
+
+  var exit_survey = {
+    timeline: [
+  {
+    type: 'survey-likert',
+    questions: [{prompt: "I favor open housing laws that allow more racial integration of neighborhoods.", labels: scale_1},
+      {prompt: "Some Black people are so touchy about race that it is difficult to get along with them.", labels: scale_1},
+      {prompt: "I would rather not have Black people live in the same apartment building I live in.", labels: scale_1}],
+    },
+    {
+      type: 'survey-likert',
+      questions: [{prompt: "It would not bother me if my new roommate was Black.", labels: scale_1},
+      {prompt: "White people should support Black people in their struggle against discrimination and segregation.", labels: scale_1},
+      {prompt: "Generally, Black people are not as smart as White people.", labels: scale_1}],
+  },
+  {
+    type: 'survey-likert',
+    questions: [{prompt: "Black and White people are inherently equal.", labels: scale_1},
+      {prompt: "I enjoy a funny racial joke, even if some people might find it offensive.", labels: scale_1},
+      {prompt: "I would probably feel somewhat self-conscious dancing with a Black person in a public place.", labels: scale_1},
+      {prompt: "I think that Black people look more similar to each other than White people do.", labels: scale_1}],
+  },
+  {
+      type: 'survey-likert',
+      questions: [{prompt: "How warm or cold do you feel towards white people?", labels: scale_2},
+      {prompt: "How warm or cold do you feel towards black people?", labels: scale_2},
+      {prompt: "Which statement best describes you?", labels: scale_3}],
+  }
+],
+  };
+  timeline.push(exit_survey);
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function(){jsPsych.data.displayData();}
+  });
+
+  </script>
+</html>

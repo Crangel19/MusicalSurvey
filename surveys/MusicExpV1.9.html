@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../jspsych.js"></script>
+    <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="../plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="../plugins/jspsych-survey-text.js"></script>
+    <script src="../plugins/jspsych-instructions.js"></script>
+    <script src="../plugins/jspsych-audio-button-response.js"></script>
+    <script src="../plugins/jspsych-html-button-response.js"></script>
+    <link rel="stylesheet" href="../css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+
+  var page_1_questions = ["Would you consider yourself religious?", "If yes, what is your religion?"];
+  var page_2_questions = ["Would you consider yourself politically affiliated in any way?", "If yes, which direction do you lean politically?"];
+
+  var page_1_options = ["Not at all", "Barely", "undecided", "somewhat", "yes", "strongly yes"];
+  var page_2_options = ["Christian", "Jewish", "Hindu", "Islamic", "Buddhist"];
+  var page_3_options = ["Strongly Liberal", "Somewhat Liberal", "Neither Liberal nor Conservative", "Somewhat Conservative", "Strongly Conservative"];
+  var page_4_options = ["High School", "Associate's Degree", "Some College", "Bachelor's degree", "Master's degree", "Doctoral degree"];
+
+  var timeline = [];
+
+  var instructions = {
+    type: 'instructions',
+    pages: [
+        'Welcome to the experiment. Click next to begin.',
+        'In this experiment, you will be asked to rate several song clips on a "likeability" scale, ' +
+        'ranging from 1-7. There will be two groups of song clips, with a short break in between.',
+        'First, you will be asked some demographic questions.'
+    ],
+    show_clickable_nav: true
+};
+timeline.push(instructions);
+
+var survey_trial = {
+  timeline: [
+    {
+  type: 'survey-text',
+  questions: [{prompt: "How old are you?"}, {prompt: "What gender do you identify as?"}, {prompt: "What city and/or state were you born in?"}, {prompt: "if you spent the majority of your childhood in a different place, what was it?"}],
+},
+  {
+      type: 'survey-text',
+      questions: [{prompt: "What is your race?"}, {prompt: "What is your ethnicity?"}],
+  },
+  {
+    type: 'survey-multi-choice',
+    questions: [{prompt: "<big>Would you consider yourself religious?</big>", options: page_1_options, horizontal: true,}, {prompt: "<b>If yes, what is your religion?</b>", options: page_2_options, horizontal: false}],
+  },
+  {
+    type: 'survey-multi-choice',
+    questions: [{prompt: "<big>Would you consider yourself politically affiliated in any way?</big>", options: page_1_options, horizontal: true,}, {prompt: "<b><big>If yes, which direction do you lean politically?</big></b>", options: page_3_options, horizontal: true}],
+  },
+  {
+    type: 'survey-multi-choice',
+    questions: [{prompt: "<big>What is your highest level of completed education?</big>", options: page_4_options, horizontal: false}],
+  },
+],
+};
+timeline.push(survey_trial);
+
+  var post_survey = {
+    type: 'html-keyboard-response',
+    stimulus: 'This concludes the survey portion of the experiment. Press any key to continue to Block one.',
+    post_trial_gap: 1540
+  };
+  timeline.push(post_survey);
+
+  var pre_block = {
+    type: 'html-button-response',
+    stimulus: 'You will now hear the first group of song excerpts. ' +
+        'After each clip, please select a number from 1-7 that best reflects ' +
+        'how much you liked the song. '+
+        'Press continue to begin block one.',
+    choices: ['Continue']
+  };
+  timeline.push(pre_block);
+
+  var block_one = {
+    type: 'audio-button-response',
+    prompt: "<p>How do you like this song?</p>",
+    choices: ['1- I never want to hear this again.', '2', '3', '4', '5', '6', '7- I would love to hear the rest of this song!'],
+    timeline: [
+      {stimulus: 'Lake Of Dreams _02.wav'},
+      {stimulus: 'Sunday In Marin _02.wav'},
+      {stimulus: 'Lyla Lou_02.wav'},
+      {stimulus: 'Gentle_ the Night _02.wav'},
+      {stimulus: 'A Little Tear_02.wav'},
+      {stimulus: 'Touch ME_02.wav'},
+      {stimulus: 'INAWIWY.wav'},
+      {stimulus: 'The Loco Motion _02.wav'},
+      {stimulus: 'NE Thang _02.wav'},
+      {stimulus: 'Fire _02.wav'},
+      {stimulus: 'The Sukkubus Lustrate _02.wav'},
+      {stimulus: 'Street Car Blues _02.wav'},
+      {stimulus: 'This Train (Munk Edit)_02.wav'},
+      {stimulus: 'Rock N_ Roll _02.wav'},
+      {stimulus: 'Everyday_02.wav'},
+      {stimulus: 'Im Glad _02.wav'},
+      {stimulus: 'Get A Hold _02.wav'},
+      {stimulus: 'Turntable Terrorist _02.wav'},
+      {stimulus: 'Resilience _02.wav'},
+      {stimulus: 'Rise and Shine _02.wav'}
+      ];
+  };
+  timeline.push(block_one);
+
+var rest_screen2 = {
+  type: 'html-button-response',
+  stimulus: 'You have reached the end of Block one. Take a moment to rest your ears, and when you are ready click continue to begin block 2.',
+  choices: ['continue'],
+  post_trial_gap: 1500
+};
+timeline.push(rest_screen2);
+
+
+  jsPsych.init({
+    timeline: timeline,
+    preload_audio: ['audio/Lake Of Dreams _02.wav', 'audio/Sunday In Marin _02.wav',
+    'audio/Lyla Lou_02.wav', 'audio/Gentle_ the Night _02.wav'}, 'audio/A Little Tear_02.wav',
+    'audio/Touch ME_02.wav', 'audio/INAWIWY.wav', 'audio/The Loco Motion _02.wav', 'audio/NE Thang _02.wav',
+    'audio/Fire _02.wav', 'audio/The Sukkubus Lustrate _02.wav', 'audio/Street Car Blues _02.wav', 'audio/This Train (Munk Edit)_02.wav',
+    'audio/Rock N_ Roll _02.wav', 'audio/Everyday_02.wav', 'audio/Im Glad _02.wav', 'audio/Get A Hold _02.wav',
+    'audio/Turntable Terrorist _02.wav', 'audio/Resilience _02.wav', 'audio/Rise and Shine _02.wav'],
+    show_progress_bar: true,
+    use_webaudio: false,
+    on_finish: function(){jsPsych.data.displayData();},
+    default_iti: 500
+  });
+
+  </script>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Musical Preference Survey</title>
+        <script src="jspsych-master/jspsych.js"></script>
+        <script src="jspsych-master/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-master/plugins/jspsych-audio-slider-response.js"></script>
+        <script src="jspsych-master/plugins/jspsych-html-button-response.js"></script>
+        <script src="jspsych-master/plugins/jspsych-audio-button-response.js"></script>
+        <link href="jspsych-master/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    <body></body>
+    <script>
+
+    var timeline = [];
+
+    var welcome = {
+        type: 'html-keyboard-response',
+        stimulus: 'Welcome! Press any key to begin.'
+    }
+    timeline.push(welcome);
+
+    var instructions = {
+      type: 'html-button-response',
+      stimulus: 'In this experiment, you will hear several short clips of ' +
+          'different songs. After each clip, you will be asked to rate it on a ' +
+          'likeability scale, from one to seven. Press continue to begin block one.',
+          choices: ['Continue']
+    }
+    timeline.push(instructions);
+
+    var test_stimuli = [
+         { stimulus: "sound/The Buuls-Zebra.mp3"},
+         { stimulus: "sound/The Buuls-Zebra.mp3"}
+       ];
+
+       var test = {
+         type: "audio-button-response",
+         stimulus: jsPsych.timelineVariable('stimulus'),
+         choices: ['1', '2', '3', '4', '5', '6', '7' ]
+       };
+
+       var test_procedure = {
+         timeline: test,
+         timeline_variables: test_stimuli
+       };
+
+       timeline.push(test_procedure);
+
+       jsPsych.init({
+         timeline: timeline
+       });
+     </script>
+     </html>

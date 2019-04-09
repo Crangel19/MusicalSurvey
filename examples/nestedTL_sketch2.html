@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>nested sketch</title>
+  <script src="../jspsych.js"></script>
+  <script src="../plugins/jspsych-html-button-response.js"></script>
+  <script src="../plugins/jspsych-audio-keyboard-response.js"></script>
+  <script src="../plugins/jspsych-audio-button-response.js"></script>
+  <script src="../plugins/jspsych-html-keyboard-response.js"></script>
+  <link rel="stylesheet" href="../css/jspsych.css"></link>
+  <style>
+    img {
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+</body>
+<script>
+
+  var audio_1 = ['sound/Galopera_01.wav', 'sound/FLy Again _01.wav', 'sound/Gettin_ Better _01.wav', 'sound/Dasotmori Live _01.wav'];
+
+  var audio_2 = ['sound/Galopera_02.wav', 'sound/FLy Again _02.wav', 'sound/Gettin_ Better _02.wav', 'sound/Dasotmori Live _02.wav'];
+
+  var timeline = [];
+
+  var pre_audio = {
+    type: 'html-button-response',
+    stimulus: 'hello?',
+    choices: ['suck my nuts']
+  };
+  timeline.push(pre_audio);
+
+  var trial_one = {
+    timeline: [
+      {
+        type: 'audio-button-response',
+        stimulus: jsPsych.timelineVariable('clip'),
+        choices: ['1- Hated it','2','3','4','5','6','7- Loved it'],
+        prompt: '<p>What did you think of this song?</p>'
+      },
+    ],
+    timeline_variables: [
+      {clip: 'sound/Galopera_01.wav'},
+      {clip: 'sound/FLy Again _01.wav'},
+      {clip: 'sound/Gettin_ Better _01.wav'},
+      {clip: 'sound/Dasotmori Live _01.wav'}
+    ],
+    randomize_order: true
+  };
+  timeline.push(trial_one);
+
+  var break_screen = {
+    type: 'html-keyboard-response',
+    stimulus: 'gold star! hit any key nigga',
+    post_trial_gap: 2500
+  };
+  timeline.push(break_screen);
+
+  var node2 = {
+    timeline: [
+      {
+        type: 'audio-button-response',
+        stimulus: jsPsych.timelineVariable('clip2'),
+        choices: ['1- Hated it','2','3','4','5','6','7- Loved it'],
+        prompt: '<p>What did you think of this song?</p>'
+      }
+    ],
+    timeline_variables: [
+      {clip2: 'sound/Galopera_02.wav'},
+      {clip2: 'sound/FLy Again _02.wav'},
+      {clip2: 'sound/Gettin_ Better _02.wav'},
+      {clip2: 'sound/Dasotmori Live _02.wav'}
+    ],
+    randomize_order: true
+  };
+  timeline.push(node2);
+
+  jsPsych.init({
+    timeline: timeline,
+    use_webaudio: false,
+    preload_audio: [audio_1, audio_2],
+    on_finish: function() {
+      jsPsych.data.displayData();
+    },
+    default_iti: 250
+  });
+
+</script>
+</html>
