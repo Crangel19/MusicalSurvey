@@ -17,7 +17,7 @@
   </head>
   <body></body>
   <script>
-
+  const fs = require('fs')
 
   var page_1_questions = ["What is the Sex you were assigned at birth?", "What is your current gender identity?"];
   var page_2_questions = ["What is your current age?", "What is your country of primary citizenship?", "What is the postal code (or name) of the place you have lived the longest?"];
@@ -767,6 +767,13 @@ timeline.push(block_two);
     on_finish: function(){jsPsych.data.displayData();},
     default_iti: 500
   });
+
+  var data = jsPsych.data.get()
+  fs.writeFile('output.txt', data, (err) => {
+
+      // In case of a error throw err.
+      if (err) throw err;
+  })
 
   </script>
 </html>
