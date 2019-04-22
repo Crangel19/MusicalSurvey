@@ -28,19 +28,24 @@
 
   var page_1_options = ["Male", "Female"];
   var page_2_options = ["Male", "Female", "Trans Male", "Trans Female", "Gender nonconforming", "other"];
-  var page_3_options = ["American Indian/Alaska Native", "East Asian", "South Asian", "Native Hawaiian or other Pacific Islander", "Black or African American", "White", "other or unknown"];
-  var page_4_options = ["Hispanic or Latino", "Not Hispanic or Latino", "Unknown"];
   var page_5_options = ["Strongly Conservative", "Moderately Conservative", "Slightly Conservative", "Neutral/No Political affiliation", "Slightly Liberal", "Moderately Liberal", "Strongly Liberal"];
   var page_6_options = ["Buddhist/Confucian/Shinto", "Christian: Catholic or Orthodox", "Christian: Protestant or other", "Jewish", "Hindu", "Muslim", "other"];
   var page_7_options = ["Strongly religious", "Moderately religious", "Slightly religious", "Not at all religious"];
   var page_8_options = ["High School", "Associate's Degree", "Some College", "Bachelor's degree", "Master's degree", "Doctoral degree", "Other"];
 
-  var audio_1 = ['sound/Galopera_01.wav', 'sound/FLy Again _01.wav', 'sound/Gettin_ Better _01.wav', 'sound/Dasotmori Live _01.wav'];
-  var audio_2 = ['sound/Galopera_02.wav', 'sound/FLy Again _02.wav', 'sound/Gettin_ Better _02.wav', 'sound/Dasotmori Live _02.wav'];
+  var audio_1 = ['sound/1 Britt Nicole Hanging On.wav', 'sound/1 Glen Campbell Im Gone This Time.wav', 'sound/1 Human Cannonball.wav', 'sound/1 I Cant Be Satisfied.wav', +
+  'sound/1 Its My Party.wav', 'sound/1 Kassie Jones.wav', 'sound/1 Mangos.wav', 'sound/1 Maxi Priest Groovin in the midnight.wav', 'sound/1 More and More.wav', 'sound/1 Pink World.wav', 'sound/1 Poor Tom.wav', +
+  'sound/1 Indian Love Call.wav', 'sound/1 Stevie Ray Vaughan Crossfire.wav', 'sound/1 Sue Thompson James.wav', 'sound/1 The Shangri Las Twist And Shout.wav', 'sound/1 The Urgency.wav', 'sound/1 Three Is a Crowd.wav', 'sound/1 Tony Joe White I Want Love.wav', 'sound/1 You Rascal You.wav', 'sound/1 adam ant something girls.wav', 'sound/2 Byther Smith I wish my mother was here.wav', 'sound/2 Casual I Didnt Mean To.wav', +
+  'sound/2 Cheatin.wav', 'sound/2 Chris Brown Forever.wav', 'sound/2 DJ Quik Born and Raised In Compton.wav', 'sound/2 Donny Hathaway LIttle Girl.wav', 'sound/2 Faye Adams Crazy Mixed Up World.wav', 'sound/2 Horace Andy.wav', +
+  'sound/2 Johnny Osbourne Lend Me Your Chopper.wav', 'sound/2 Make Me Over.wav', 'sound/2 Moon River Jerry Butler.wav', 'sound/2 Natalie Cole Take A Look.wav', 'sound/2 RL Burnside Glory Be.wav', 'sound/2 The Last Word.wav', 'sound/2 Rumasuma Sonny Simmons.wav', 'sound/2 Terry Callier.wav', 'sound/2 Thank You Lord.wav', +
+  'sound/2 Warrior King Empress So Divine.wav', 'sound/2 An ti chans.wav', 'sound/tonight will be alright.wav', 'sound/1 Broke Down on the Brazos.wav', 'sound/2 Essaywhuman_!!_01.wav', 'sound/Check.wav'];
 
   var scale_1 = ["Strongly disagree", "Moderately disagree", "Slightly disagree", "Neither agree nor disagree", "Slightly agree", "Moderately agree", "Strongly Agree"];
   var scale_2 = ["Extremely cold", "Moderately cold", "Slightly cold", "Neither warm or cold", "Slightly warm", "Moderately warm", "Extremely warm"];
   var scale_3 = ["I strongly prefer white people to black people.", "I moderately prefer white people to black people.", "I slightly prefer white people to black people.", "I like white people and black people equally.", "I slightly prefer black people to white people.", "I moderately prefer black people to white people.", "I strongly prefer black people to white people."];
+
+
+  var subject_id = jsPsych.randomization.randomID(15);
 
   function getRandomInt(min, max){
     min = Math.ceil(min);
@@ -48,7 +53,14 @@
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
 
-  var rand = getRandomInt(1, 3);
+  var rand = getRandomInt(1, 2);
+
+// record the condition assignment in the jsPsych data
+// this adds a property called 'subject' and a property called 'condition' to every trial
+  jsPsych.data.addProperties({
+  subject: subject_id,
+  condition: rand
+});
 
 
   var timeline = [];
@@ -57,8 +69,7 @@
     type: 'instructions',
     pages: [
       'Welcome!',
-      'In this experiment, you will be asked to listen to and rate several short song clips on a "likeability" scale from 1-7. ' +
-      'There will be two groups of song clips, with a short break in between.',
+      'In this experiment, you will be asked to listen to and rate several short song clips on a "likeability" scale from 1-7. ',
       'First, you will be asked some basic demographic questions. '+
       'After the music clips, you will fill out a brief exit survey. ',
       'Click next to begin.'
@@ -76,12 +87,8 @@ var survey_trial1 = {
     },
     {
   type: 'survey-text',
-  questions: [{prompt: "<big>What is your current age?</big>"}, {prompt: "<big>What is your country and/or state of primary residence?</big>"}, {prompt: "<big>What is the postal code of the place you have lived the longest?</big>"}],
+  questions: [{prompt: "<big>What is your current age?</big>"}, {prompt: "<big>What is your country and/or state of primary residence?</big>"}, {prompt: "<big>What is the city or postal code in which you have lived the longest?</big>"}],
 },
-  {
-      type: 'survey-multi-choice',
-      questions: [{prompt: "<big>What is your race?</big>", options: page_3_options,}, {prompt: "<big>What is your ethnicity?</big>", options: page_4_options,}],
-  },
   {
     type: 'survey-multi-choice',
     questions: [{prompt: "<big>What is your political identity?</big>", options: page_5_options,}],
@@ -109,6 +116,7 @@ var instructions2 = {
   post_trial_gap: 500
 };
 timeline.push(instructions2);
+
 
 if (rand == 1) {
   var condition_one = {
@@ -148,23 +156,13 @@ if (rand == 2) {
 timeline.push(condition_two);
 };
 
-if (rand == 3) {
-  var condition_three = {
-  type: 'html-button-response',
-  stimulus: 'Click Continue when you are ready to begin block one.',
-  choices: ['Continue'],
-  post_trial_gap: 500
-}
-timeline.push(condition_three);
-};
-
 
   var pre_b1 = {
     type: 'html-button-response',
-    stimulus: 'You will now hear the first group of song excerpts. ' +
+    stimulus: 'You will now hear the song excerpts.' +
         'After each clip, please select a number from 1-7 that best reflects ' +
         'how much you liked the song. '+
-        'Click continue to begin block one.',
+        'Click continue to begin.',
     choices: ['Continue'],
     post_trial_gap: 750
   };
@@ -180,16 +178,29 @@ timeline.push(condition_three);
       },
     ],
     timeline_variables: [
-      {clip: 'sound/Galopera_01.wav'},
-      {clip: 'sound/FLy Again _01.wav'},
-      {clip: 'sound/Gettin_ Better _01.wav'},
-      {clip: 'sound/Dasotmori Live _01.wav'}
+      {clip: 'sound/1 Poor Tom.wav'},
+      {clip: 'sound/1 Broke Down on the Brazos.wav'},
+      {clip: 'sound/1 Stevie Ray Vaughan Crossfire.wav'},
+      {clip: 'sound/1 Sue Thompson James.wav'},
+      {clip: 'sound/1 The Shangri Las Twist And Shout.wav'},
+      {clip: 'sound/1 The Urgency.wav'},
+      {clip: 'sound/1 Three Is a Crowd.wav'},
+      {clip: 'sound/1 Tony Joe White I Want Love.wav'},
+      {clip: 'sound/1 You Rascal You.wav'},
+      {clip: 'sound/1 adam ant something girls.wav'},
+      {clip: 'sound/2 Moon River Jerry Butler.wav'},
+      {clip: 'sound/2 Natalie Cole Take A Look.wav'},
+      {clip: 'sound/2 RL Burnside Glory Be.wav'},
+      {clip: 'sound/2 The Last Word.wav'},
+      {clip: 'sound/2 Rumasuma Sonny Simmons.wav'},
+      {clip: 'sound/2 Terry Callier.wav'},
+      {clip: 'sound/2 Thank You Lord.wav'},
+      {clip: 'sound/2 An ti chans.wav'},
     ],
-    randomize_order: true
   };
   timeline.push(block_one);
 
-var pre_b2 = {
+  var pre_b2 = {
   type: 'instructions',
   pages: [
     'You have reached the end of block one. Feel free to take a short break if you need one, ' +
@@ -199,10 +210,10 @@ var pre_b2 = {
   ],
   post_trial_gap: 750,
   show_clickable_nav: true
-};
-timeline.push(pre_b2);
+  };
+  timeline.push(pre_b2);
 
-var block_two = {
+  var block_two = {
   timeline: [
     {
       type: 'audio-button-response',
@@ -212,26 +223,40 @@ var block_two = {
     }
   ],
   timeline_variables: [
-    {clip2: 'sound/Galopera_02.wav'},
-    {clip2: 'sound/FLy Again _02.wav'},
-    {clip2: 'sound/Gettin_ Better _02.wav'},
-    {clip2: 'sound/Dasotmori Live _02.wav'}
+    {clip2: 'sound/1 Britt Nicole Hanging On.wav'},
+    {clip2: 'sound/1 Glen Campbell Im Gone This Time.wav'},
+    {clip2: 'sound/1 Human Cannonball.wav'},
+    {clip2: 'sound/1 I Cant Be Satisfied.wav'},
+    {clip2: 'sound/1 Kassie Jones.wav'},
+    {clip2: 'sound/1 Mangos.wav'},
+    {clip2: 'sound/1 Maxi Priest Groovin in the midnight.wav'},
+    {clip2: 'sound/1 More and More.wav'},
+    {clip2: 'sound/1 Pink World.wav'},
+    {clip2: 'sound/2 Byther Smith I wish my mother was here.wav'},
+    {clip2: 'sound/2 Casual I Didnt Mean To.wav'},
+    {clip2: 'sound/2 Chris Brown Forever.wav'},
+    {clip2: 'sound/2 DJ Quik Born and Raised In Compton.wav'},
+    {clip2: 'sound/2 Donny Hathaway LIttle Girl.wav'},
+    {clip2: 'sound/2 Faye Adams Crazy Mixed Up World.wav'},
+    {clip2: 'sound/2 Horace Andy.wav'},
+    {clip2: 'sound/2 Make Me Over.wav'}
   ],
-  randomize_order: true
-};
-timeline.push(block_two);
-
-  var survey_instructions2 = {
-    type: 'instructions',
-    pages:
-    [
-        'You have reached the end of block two. When you are ready, click next to begin the exit survey.',
-        'Please read each question and answer as truthfully as you can. If you prefer not to answer a question, you may leave it blank.',
-    ],
-    post_trial_gap: 1000,
-    show_clickable_nav: true
   };
-  timeline.push(survey_instructions2);
+  timeline.push(block_two);
+
+
+var pre_b2 = {
+  type: 'instructions',
+  pages: [
+    'You have reached the end of the clip phase. Feel free to take a short break if you need one, ' +
+    'and when you are ready to move on click next to begin the exit survey.',
+    'Please read each question and answer as truthfully as you can. If you prefer not to answer a question, you may leave it blank.',
+  ],
+  post_trial_gap: 750,
+  show_clickable_nav: true
+};
+timeline.push(pre_b2);
+
 
   var exit_survey = {
     timeline: [
@@ -762,7 +787,7 @@ timeline.push(block_two);
     timeline: timeline,
     show_progress_bar: true,
     use_webaudio: false,
-    preload_audio: [audio_1, audio_2],
+    preload_audio: [audio_1],
     on_finish: function(){jsPsych.data.displayData();},
     default_iti: 500
   });
