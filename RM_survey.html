@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Musical Preference Survey</title>
+    <script src="jspsych.js"></script>
+    <script src="plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="plugins/jspsych-survey-text.js"></script>
+    <script src="plugins/jspsych-instructions.js"></script>
+    <script src="plugins/jspsych-audio-button-response.js"></script>
+    <script src="plugins/jspsych-html-button-response.js"></script>
+    <script src="plugins/jspsych-image-button-response.js"></script>
+    <script src="plugins/jspsych-iat-image.js"></script>
+    <script src="plugins/jspsych-iat-html.js"></script>
+    <script src="plugins/jspsych-survey-likert.js"></script>
+    <link rel="stylesheet" href="css/jspsych.css"></link>
+  </head>
+  <body></body>
+  <script>
+
+  var page_1_questions = ["What is the Sex you were assigned at birth?", "What is your current gender identity?"];
+  var page_2_questions = ["What is your current age?", "What is your country of primary citizenship?", "What is the postal code (or name) of the place you have lived the longest?"];
+  var page_3_questions = ["What is your race?", "What is your ethnicity?"];
+  var page_4_questions = ["What is your political identity?"];
+  var page_5_questions = ["What is your religious affiliation?"];
+  var page_6_questions = ["How religious do you consider yourself to be?"];
+  var page_7_questions = ["What is the highest level of education you have completed?"];
+
+  var page_1_options = ["Male", "Female"];
+  var page_2_options = ["Male", "Female", "Trans Male", "Trans Female", "Gender nonconforming", "other"];
+  var page_5_options = ["Strongly Conservative", "Moderately Conservative", "Slightly Conservative", "Neutral/No Political affiliation", "Slightly Liberal", "Moderately Liberal", "Strongly Liberal"];
+  var page_6_options = ["Buddhist/Confucian/Shinto", "Christian: Catholic or Orthodox", "Christian: Protestant or other", "Jewish", "Hindu", "Muslim", "other"];
+  var page_7_options = ["Strongly religious", "Moderately religious", "Slightly religious", "Not at all religious"];
+  var page_8_options = ["High School", "Associate's Degree", "Some College", "Bachelor's degree", "Master's degree", "Doctoral degree", "Other"];
+
+  var audio_1 = ['sound/1 Britt Nicole Hanging On.wav', 'sound/1 Glen Campbell Im Gone This Time.wav', 'sound/1 Human Cannonball.wav', 'sound/1 I Cant Be Satisfied.wav', +
+  'sound/1 Its My Party.wav', 'sound/1 Kassie Jones.wav', 'sound/1 Mangos.wav', 'sound/1 Maxi Priest Groovin in the midnight.wav', 'sound/1 More and More.wav', 'sound/1 Pink World.wav', 'sound/1 Poor Tom.wav', +
+  'sound/1 Indian Love Call.wav', 'sound/1 Stevie Ray Vaughan Crossfire.wav', 'sound/1 Sue Thompson James.wav', 'sound/1 The Shangri Las Twist And Shout.wav', 'sound/1 The Urgency.wav', 'sound/1 Three Is a Crowd.wav', 'sound/1 Tony Joe White I Want Love.wav', 'sound/1 You Rascal You.wav', 'sound/1 adam ant something girls.wav', 'sound/2 Byther Smith I wish my mother was here.wav', 'sound/2 Casual I Didnt Mean To.wav', +
+  'sound/2 Cheatin.wav', 'sound/2 Chris Brown Forever.wav', 'sound/2 DJ Quik Born and Raised In Compton.wav', 'sound/2 Donny Hathaway LIttle Girl.wav', 'sound/2 Faye Adams Crazy Mixed Up World.wav', 'sound/2 Horace Andy.wav', +
+  'sound/2 Johnny Osbourne Lend Me Your Chopper.wav', 'sound/2 Make Me Over.wav', 'sound/2 Moon River Jerry Butler.wav', 'sound/2 Natalie Cole Take A Look.wav', 'sound/2 RL Burnside Glory Be.wav', 'sound/2 The Last Word.wav', 'sound/2 Rumasuma Sonny Simmons.wav', 'sound/2 Terry Callier.wav', 'sound/2 Thank You Lord.wav', +
+  'sound/2 Warrior King Empress So Divine.wav', 'sound/2 An ti chans.wav', 'sound/tonight will be alright.wav', 'sound/1 Broke Down on the Brazos.wav', 'sound/2 Essaywhuman_!!_01.wav', 'sound/Check.wav', 'sound/2 Yung Joc Its Goin Down.wav', 'sound/2 Untamed.wav', 'sound/2 The Notorious Who Shot Ya.wav', 'sound/2 Ayo Joyful without you.wav', 'sound/1 Please Help Me Im Falling.wav'];
+
+  var scale_1 = ["Strongly disagree", "Moderately disagree", "Slightly disagree", "Neither agree nor disagree", "Slightly agree", "Moderately agree", "Strongly Agree"];
+  var scale_2 = ["Extremely cold", "Moderately cold", "Slightly cold", "Neither warm or cold", "Slightly warm", "Moderately warm", "Extremely warm"];
+  var scale_3 = ["I strongly prefer white people to black people.", "I moderately prefer white people to black people.", "I slightly prefer white people to black people.", "I like white people and black people equally.", "I slightly prefer black people to white people.", "I moderately prefer black people to white people.", "I strongly prefer black people to white people."];
+
+
+  var subject_id = jsPsych.randomization.randomID(15);
+
+  function getRandomInt(min, max){
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  var rand = getRandomInt(1, 2);
+
+// record the condition assignment in the jsPsych data
+// this adds a property called 'subject' and a property called 'condition' to every trial
+  jsPsych.data.addProperties({
+  subject: subject_id,
+  condition: rand
+});
+
+
+  var timeline = [];
+
+  var instructions1 = {
+    type: 'instructions',
+    pages: [
+      'Welcome!',
+      'In this experiment, you will be asked to listen to and rate several short song clips on a "likeability" scale from 1-7. ',
+      'First, you will be asked some basic demographic questions. '+
+      'After the music clips, you will fill out a brief exit survey. ',
+      'Click next to begin.'
+    ],
+    post_trial_gap: 1000,
+    show_clickable_nav: true
+};
+timeline.push(instructions1);
+
+var survey_trial1 = {
+  timeline: [
+    {
+      type: 'survey-multi-choice',
+      questions: [{prompt: "<big>What is the Sex you were assigned at birth?</big>", options: page_1_options,}, {prompt: "<big>What is your current gender identity?</big>", options: page_2_options}],
+    },
+    {
+  type: 'survey-text',
+  questions: [{prompt: "<big>What is your current age?</big>"}, {prompt: "<big>What is your country and/or state of primary residence?</big>"}, {prompt: "<big>What is the city or postal code in which you have lived the longest?</big>"}],
+},
+  {
+    type: 'survey-multi-choice',
+    questions: [{prompt: "<big>What is your political identity?</big>", options: page_5_options,}],
+  },
+  {
+    type: 'survey-multi-choice',
+    questions: [{prompt: "<big>What is your religious afiliation?</big>", options: page_6_options,}],
+  },
+  {
+    type: 'survey-multi-choice',
+    questions: [{prompt: "<big>How religious do you consider yourself to be?</big>", options: page_7_options, horizontal: false}],
+  },
+  {
+    type: 'survey-multi-choice',
+    questions: [{prompt: "<big>What is the highest level of education you have completed?</big>", options: page_8_options}],
+  },
+],
+};
+timeline.push(survey_trial1);
+
+var instructions2 = {
+  type: 'html-button-response',
+  stimulus: 'This concludes the survey portion of the experiment.',
+  choices: ['Next'],
+  post_trial_gap: 500
+};
+timeline.push(instructions2);
+
+
+if (rand == 1) {
+  var condition_one = {
+  timeline: [
+    {
+      type: 'html-button-response',
+      stimulus: 'Before moving on, you will be shown a short news article. Please read the entire article, then click Continue to begin block one.',
+      choices: ['Next'],
+      post_trial_gap: 1500,
+    },
+    {
+      type: 'image-button-response',
+      stimulus: 'img/1neg_white.jpg',
+      choices: ['Continue'],
+    }
+  ],
+}
+timeline.push(condition_one);
+};
+
+if (rand == 2) {
+  var condition_two = {
+  timeline: [
+    {
+      type: 'html-button-response',
+      stimulus: 'Before moving on, you will be shown a short news article. Please read the entire article, then click Continue to begin block one.',
+      choices: ['Next'],
+      post_trial_gap: 1500,
+    },
+    {
+      type: 'image-button-response',
+      stimulus: 'img/1neg_blk.jpg',
+      choices: ['Continue'],
+    }
+  ],
+}
+timeline.push(condition_two);
+};
+
+
+  var pre_b1 = {
+    type: 'html-button-response',
+    stimulus: 'You will now hear the song excerpts.' +
+        'After each clip, please select a number from 1-7 that best reflects ' +
+        'how much you liked the song. '+
+        'Click continue to begin.',
+    choices: ['Continue'],
+    post_trial_gap: 750
+  };
+  timeline.push(pre_b1);
+
+  var block_one = {
+    timeline: [
+      {
+        type: 'audio-button-response',
+        stimulus: jsPsych.timelineVariable('clip'),
+        choices: ['1- Hated it','2','3','4','5','6','7- Loved it'],
+        prompt: '<p>What did you think of this song?</p>'
+      },
+    ],
+    timeline_variables: [
+      {clip: 'sound/1 Poor Tom.wav'},
+      {clip: 'sound/1 Broke Down on the Brazos.wav'},
+      {clip: 'sound/1 Stevie Ray Vaughan Crossfire.wav'},
+      {clip: 'sound/1 Sue Thompson James.wav'},
+      {clip: 'sound/1 The Shangri Las Twist And Shout.wav'},
+      {clip: 'sound/1 The Urgency.wav'},
+      {clip: 'sound/1 Three Is a Crowd.wav'},
+      {clip: 'sound/1 Tony Joe White I Want Love.wav'},
+      {clip: 'sound/1 You Rascal You.wav'},
+      {clip: 'sound/1 adam ant something girls.wav'},
+      {clip: 'sound/2 Moon River Jerry Butler.wav'},
+      {clip: 'sound/2 Natalie Cole Take A Look.wav'},
+      {clip: 'sound/2 RL Burnside Glory Be.wav'},
+      {clip: 'sound/2 The Last Word.wav'},
+      {clip: 'sound/2 Rumasuma Sonny Simmons.wav'},
+      {clip: 'sound/2 Terry Callier.wav'},
+      {clip: 'sound/2 Thank You Lord.wav'},
+      {clip: 'sound/2 An ti chans.wav'},
+      {clip: 'sound/2 Yung Joc Its Goin Down.wav'},
+      {clip: 'sound/2 Untamed.wav'}
+    ],
+    randomize_order: true
+  };
+  timeline.push(block_one);
+
+  var pre_b2 = {
+  type: 'instructions',
+  pages: [
+    'You have reached the end of block one. Feel free to take a short break if you need one, ' +
+    'and when you are ready to move on click next to begin block two. ',
+    'Remember, after listening to each clip please select a number from 1-7 that best reflects ' +
+    'how much you liked the song.',
+  ],
+  post_trial_gap: 750,
+  show_clickable_nav: true
+  };
+  timeline.push(pre_b2);
+
+  var block_two = {
+  timeline: [
+    {
+      type: 'audio-button-response',
+      stimulus: jsPsych.timelineVariable('clip2'),
+      choices: ['1- Hated it','2','3','4','5','6','7- Loved it'],
+      prompt: '<p>What did you think of this song?</p>'
+    }
+  ],
+  timeline_variables: [
+    {clip2: 'sound/1 Britt Nicole Hanging On.wav'},
+    {clip2: 'sound/1 Glen Campbell Im Gone This Time.wav'},
+    {clip2: 'sound/1 Human Cannonball.wav'},
+    {clip2: 'sound/1 I Cant Be Satisfied.wav'},
+    {clip2: 'sound/1 Kassie Jones.wav'},
+    {clip2: 'sound/1 Mangos.wav'},
+    {clip2: 'sound/1 Maxi Priest Groovin in the midnight.wav'},
+    {clip2: 'sound/1 More and More.wav'},
+    {clip2: 'sound/1 Pink World.wav'},
+    {clip2: 'sound/1 Please Help Me Im Falling.wav'},
+    {clip2: 'sound/2 The Notorious Who Shot Ya.wav'},
+    {clip2: 'sound/2 Ayo Joyful without you.wav'},
+    {clip2: 'sound/2 Byther Smith I wish my mother was here.wav'},
+    {clip2: 'sound/2 Casual I Didnt Mean To.wav'},
+    {clip2: 'sound/2 Chris Brown Forever.wav'},
+    {clip2: 'sound/2 DJ Quik Born and Raised In Compton.wav'},
+    {clip2: 'sound/2 Donny Hathaway LIttle Girl.wav'},
+    {clip2: 'sound/2 Faye Adams Crazy Mixed Up World.wav'},
+    {clip2: 'sound/2 Horace Andy.wav'},
+    {clip2: 'sound/2 Make Me Over.wav'}
+  ],
+  randomize_order: true
+  };
+  timeline.push(block_two);
+
+
+var pre_b2 = {
+  type: 'instructions',
+  pages: [
+    'You have reached the end of the clip phase. Feel free to take a short break if you need one, ' +
+    'and when you are ready to move on click next to begin the exit survey.',
+    'Please read each question and answer as truthfully as you can. If you prefer not to answer a question, you may leave it blank.',
+  ],
+  post_trial_gap: 750,
+  show_clickable_nav: true
+};
+timeline.push(pre_b2);
+
+
+  var exit_survey = {
+    timeline: [
+  {
+    type: 'survey-likert',
+    questions: [{prompt: "I favor open housing laws that allow more racial integration of neighborhoods.", labels: scale_1},
+      {prompt: "Some Black people are so touchy about race that it is difficult to get along with them.", labels: scale_1},
+      {prompt: "I would rather not have Black people live in the same apartment building I live in.", labels: scale_1}],
+    },
+    {
+      type: 'survey-likert',
+      questions: [{prompt: "It would not bother me if my new roommate was Black.", labels: scale_1},
+      {prompt: "White people should support Black people in their struggle against discrimination and segregation.", labels: scale_1},
+      {prompt: "Generally, Black people are not as smart as White people.", labels: scale_1}],
+  },
+  {
+    type: 'survey-likert',
+    questions: [{prompt: "Black and White people are inherently equal.", labels: scale_1},
+      {prompt: "I enjoy a funny racial joke, even if some people might find it offensive.", labels: scale_1},
+      {prompt: "I would probably feel somewhat self-conscious dancing with a Black person in a public place.", labels: scale_1},
+      {prompt: "I think that Black people look more similar to each other than White people do.", labels: scale_1}],
+  },
+  {
+      type: 'survey-likert',
+      questions: [{prompt: "How warm or cold do you feel towards white people?", labels: scale_2},
+      {prompt: "How warm or cold do you feel towards black people?", labels: scale_2},
+      {prompt: "Which statement best describes you?", labels: scale_3}],
+  }
+],
+  post_trial_gap: 1000
+  };
+  timeline.push(exit_survey);
+
+  //IAT START
+  var welcome_block = {
+    type: 'html-keyboard-response',
+    stimulus: '<p>In the next section you will ' +
+    'complete an Implicit Association Test (IAT) in which you ' +
+    'will be asked to sort pictures and words into groups as ' +
+    'fast as you can.</p><p>Press any key to begin.</p>',
+    post_trial_gap: 1500
+  };
+
+  var category_block = {
+    type: 'html-keyboard-response',
+    stimulus: '<p>Next, you will use the "E" and "I" computer keys ' + 'to categorize items into groups as fast as you can. ' +
+    'These are the four groups and the items that belong to each:<br><br>' +
+    '<strong>Good</strong>:<br>' + 'Triumph, Glorious, Pleasing, Delightful, Terrific, Friend,' +
+    'Joyous, Love,<br><br>' + '<strong>Bad</strong>:<br>' + 'Nasty, ' +
+    'Hatred, Sickening, Humiliate, Selfish, Dirty, Rotten, Despise<br><br>' +
+    '<strong>Black People</strong>:<br>' + "<img src='img/bf14_nc.jpg'></img>  " +
+    "<img src='img/bf23_nc.jpg'></img>  " + "<img src='img/bf56_nc.jpg'></img>  " +
+    "<img src='img/bm14_nc.jpg'></img>  " + "<img src='img/bm23_nc.jpg'></img>  " +
+    "<img src='img/bm56_nc.jpg'></img><br><br>" + '<strong>White People</strong>:<br>' +
+    "<img src='img/wf2_nc.jpg'></img>  " + "<img src='img/wf3_nc.jpg'></img>  " +
+    "<img src='img/wf6_nc.jpg'></img>  " + "<img src='img/wm1_nc.jpg'></img>  " +
+    "<img src='img/wm4_nc.jpg'></img>  " + "<img src='img/wm6_nc.jpg'></img><br><br>" +
+    "Press any key to continue.</p>",
+    post_trial_gap: 1500
+  };
+
+  var instructions_block = {
+    type: 'html-keyboard-response',
+    stimulus: "<div style='position: absolute; top: 18%; left: 20%'><p>Press E for:<br><strong>White people</strong></p></div>" +
+    "<div style='position: absolute; top: 18%; right: 20%'><p>Press I for:<br><strong>Black people</strong></p></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that belong to the White People category. Put a right finger on the " +
+    "<strong>I</strong> key for items that belong to the Black People " +
+    "category. Items will appear one at a time.<br><br>" + "If you " +
+    "make a mistake, a red X will appear. Press the keys listed below " +
+    "to continue. Go as fast as you can while being accurate.<br><br> " +
+    "Press the any key when you are ready to start.</div>",
+  };
+
+
+  var trial_block = {
+    timeline: [
+      {
+        type: 'iat-image',
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+        html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+        bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+        force_correct_key_press: true,
+        display_feedback: true,
+        trial_duration: 3000, //Only if display_feedback is false
+        left_category_key: 'E',
+        right_category_key: 'I',
+        left_category_label: ['WHITE'],
+        right_category_label: ['BLACK'],
+        response_ends_trial: true,
+        data: { iat_type: 'practice' }
+      }
+    ],
+    timeline_variables: [
+      {stimulus: "img/wf2_nc.jpg", stim_key_association: "left"},
+      {stimulus: "img/wf3_nc.jpg", stim_key_association: "left"},
+      {stimulus: "img/wf6_nc.jpg", stim_key_association: "left"},
+      {stimulus: "img/wm1_nc.jpg", stim_key_association: "left"},
+      {stimulus: "img/wm4_nc.jpg", stim_key_association: "left"},
+      {stimulus: "img/wm6_nc.jpg", stim_key_association: "left"},
+      {stimulus: "img/bf14_nc.jpg", stim_key_association: "right"},
+      {stimulus: "img/bf23_nc.jpg", stim_key_association: "right"},
+      {stimulus: "img/bf56_nc.jpg", stim_key_association: "right"},
+      {stimulus: "img/bm14_nc.jpg", stim_key_association: "right"},
+      {stimulus: "img/bm23_nc.jpg", stim_key_association: "right"},
+      {stimulus: "img/bm56_nc.jpg", stim_key_association: "right"}
+    ],
+    randomize_order: true,
+    repetitions: 2
+  };
+
+  var instructions_block2 = {
+    type: 'html-keyboard-response',
+    stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br><strong>Bad</strong></div>" +
+    "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br><strong>Good</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Put a left finger on the <strong>E</strong> key for items that " +
+    "belong to the BAD category. Put a right finger on the " +
+    "<strong>I</strong> key for items that belong to the GOOD" +
+    "category. Items will appear one at a time.<br><br>" + "If you " +
+    "make a mistake, a red X will appear. Press the keys listed below " +
+    "to continue. Go as fast as you can while being accurate.<br><br> " +
+    "Press the any key when you are ready to start.</div>",
+  };
+
+  var trial_block2 = {
+    timeline: [
+      {
+        type: 'iat-html',
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+        html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+        bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+        force_correct_key_press: true,
+        display_feedback: true,
+        trial_duration: 3000, //Only if display_feedback is false
+        left_category_key: 'E',
+        right_category_key: 'I',
+        left_category_label: ['BAD'],
+        right_category_label: ['GOOD'],
+        response_ends_trial: true,
+        data: { iat_type: 'practice' }
+      }
+    ],
+    timeline_variables: [
+      {stimulus: "Humiliate", stim_key_association: "left"},
+      {stimulus: "Nasty", stim_key_association: "left"},
+      {stimulus: "Hatred", stim_key_association: "left"},
+      {stimulus: "Sickening", stim_key_association: "left"},
+      {stimulus: "Selfish", stim_key_association: "left"},
+      {stimulus: "Dirty", stim_key_association: "left"},
+      {stimulus: "Rotten", stim_key_association: "left"},
+      {stimulus: "Despise", stim_key_association: "left"},
+      {stimulus: "Triumph", stim_key_association: "right"},
+      {stimulus: "Glorious", stim_key_association: "right"},
+      {stimulus: "Pleasing", stim_key_association: "right"},
+      {stimulus: "Delightful", stim_key_association: "right"},
+      {stimulus: "Terrific", stim_key_association: "right"},
+      {stimulus: "Friend", stim_key_association: "right"},
+      {stimulus: "Love", stim_key_association: "right"},
+      {stimulus: "Joyous", stim_key_association: "right"}
+    ],
+    randomize_order: true,
+    repetitions: 2
+  };
+
+  var instructions_block3 = {
+    type: 'html-keyboard-response',
+    stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
+    "<strong>BAD</strong><br>" + "or<br>" + "<strong>White People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
+    "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>Black People</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for " +
+    "White People<br>" + "Use <strong>I</strong> for Good and for Black People<br>" +
+    "Each item belongs to only one category.<br><br>" + "If you " +
+    "make a mistake, a red X will appear. Press the keys listed below " +
+    "to continue. Go as fast as you can while being accurate.<br><br> " +
+    "Press the any key when you are ready to start.</div>",
+  };
+
+  var trial_block3 = {
+    timeline: [
+      {
+        type: jsPsych.timelineVariable('type'),
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+        html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+        bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+        force_correct_key_press: true,
+        display_feedback: true,
+        trial_duration: 3000, //Only if display_feedback is false
+        left_category_key: 'E',
+        right_category_key: 'I',
+        left_category_label: ['BAD', 'WHITE'],
+        right_category_label: ['GOOD', 'BLACK'],
+        response_ends_trial: true,
+        data: { iat_type: 'practice' }
+      }
+    ],
+    timeline_variables: [
+      {type: 'iat-image', stimulus: "img/wf2_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/wf3_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/wf6_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/wm1_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/wm4_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/wm6_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/bf14_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/bf23_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/bf56_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/bm14_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/bm23_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/bm56_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Humiliate", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Nasty", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Hatred", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Sickening", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Selfish", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Dirty", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Rotten", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Despise", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Triumph", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Glorious", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Pleasing", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Delightful", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Terrific", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Friend", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Love", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
+    ],
+    randomize_order: true,
+    repetitions: 1
+  };
+
+  var instructions_block4 = {
+    type: 'html-keyboard-response',
+    stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br> " +
+    "<strong>BAD</strong><br>" + "or<br>" + "<strong>White people</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>" +
+    "Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" + "<strong>Black people</strong></div>" +
+    "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part.<br>" + "Use <strong>E</strong> for Bad and for " +
+    "White People<br>" + "Use <strong>I</strong> for Good and for Black People<br>" +
+    "Each item belongs to only one category.<br><br>" + "If you " +
+    "make a mistake, a red X will appear. Press the keys listed below " +
+    "to continue. Go as fast as you can while being accurate.<br><br> " +
+    "Press the any key when you are ready to start.</div>",
+  };
+
+  var trial_block4 = {
+    timeline: [
+        {
+          type: jsPsych.timelineVariable('type'),
+          is_html: jsPsych.timelineVariable('is_html'),
+          stimulus: jsPsych.timelineVariable('stimulus'),
+          stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+          html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+          bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+          force_correct_key_press: true,
+          display_feedback: true,
+          trial_duration: 3000, //Only if display_feedback is false
+          left_category_key: 'E',
+          right_category_key: 'I',
+          left_category_label: ['BAD', 'WHITE'],
+          right_category_label: ['GOOD', 'BLACK'],
+          response_ends_trial: true,
+          data: { iat_type: 'bad-white' }
+        }
+      ],
+      timeline_variables: [
+        {type: 'iat-image', stimulus: "img/wf2_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/wf3_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/wf6_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/wm1_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/wm4_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/wm6_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/bf14_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/bf23_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/bf56_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/bm14_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/bm23_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/bm56_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Humiliate", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Nasty", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Hatred", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Sickening", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Selfish", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Dirty", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Rotten", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Despise", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Triumph", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Glorious", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Pleasing", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Delightful", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Terrific", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Friend", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Love", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
+      ],
+      randomize_order: true,
+      repetitions: 2
+    };
+
+    var instructions_block5 = {
+      type: 'html-keyboard-response',
+      stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Black people</strong></div>" +
+      "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>White people</strong></div>" +
+      "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Watch out, the labels have changed positions!<br>" +
+      "Use <strong>E</strong> for Black People<br>" + "Use <strong>I</strong> for White People<br><br>" +
+      "If you make a mistake, a red X will appear. Press the keys listed below " +
+      "to continue. Go as fast as you can while being accurate.<br><br> " +
+      "Press the any key when you are ready to start.</div>"
+    };
+
+    var trial_block5 = {
+      timeline: [
+        {
+          type: 'iat-image',
+          is_html: false,
+          stimulus: jsPsych.timelineVariable('stimulus'),
+          stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+          html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+          bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+          force_correct_key_press: true,
+          display_feedback: true,
+          trial_duration: 3000, //Only if display_feedback is false
+          left_category_key: 'E',
+          right_category_key: 'I',
+          left_category_label: ['BLACK'],
+          right_category_label: ['WHITE'],
+          response_ends_trial: true,
+          data: { iat_type: 'practice' }
+        }
+      ],
+      timeline_variables: [
+        {stimulus: "img/wf2_nc.jpg", stim_key_association: "right"},
+        {stimulus: "img/wf3_nc.jpg", stim_key_association: "right"},
+        {stimulus: "img/wf6_nc.jpg", stim_key_association: "right"},
+        {stimulus: "img/wm1_nc.jpg", stim_key_association: "right"},
+        {stimulus: "img/wm4_nc.jpg", stim_key_association: "right"},
+        {stimulus: "img/wm6_nc.jpg", stim_key_association: "right"},
+        {stimulus: "img/bf14_nc.jpg", stim_key_association: "left"},
+        {stimulus: "img/bf23_nc.jpg", stim_key_association: "left"},
+        {stimulus: "img/bf56_nc.jpg", stim_key_association: "left"},
+        {stimulus: "img/bm14_nc.jpg", stim_key_association: "left"},
+        {stimulus: "img/bm23_nc.jpg", stim_key_association: "left"},
+        {stimulus: "img/bm56_nc.jpg", stim_key_association: "left"}
+      ],
+      randomize_order: true,
+      repetitions: 2
+    };
+    var instructions_block6 = {
+      type: 'html-keyboard-response',
+      stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>BAD</strong><br>" + "or<br>" +
+      "<strong>Black people</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>GOOD</strong><br>" + "or<br>" +
+      "<strong>White people</strong></div>" +
+      "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>Use <strong>E</strong> for Bad and for Black people<br>" +
+      "Use <strong>I</strong> for Good and for White People<br><br>" +
+      "If you make a mistake, a red X will appear. Press the keys listed below " +
+      "to continue. Go as fast as you can while being accurate.<br><br> " +
+      "Press the any key when you are ready to start.</div>"
+    };
+
+    var trial_block6 = {
+      timeline: [
+      {
+        type: jsPsych.timelineVariable('type'),
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+        html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+        bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+        force_correct_key_press: true,
+        display_feedback: true,
+        trial_duration: 3000, //Only if display_feedback is false
+        left_category_key: 'E',
+        right_category_key: 'I',
+        left_category_label: ['BAD', 'BLACK'],
+        right_category_label: ['GOOD', 'WHITE'],
+        response_ends_trial: true,
+        data: {iat_type: 'practice'}
+      }
+      ],
+      timeline_variables: [
+        {type: 'iat-image', stimulus: "img/wf2_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/wf3_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/wf6_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/wm1_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/wm4_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/wm6_nc.jpg", stim_key_association: "right"},
+        {type: 'iat-image', stimulus: "img/bf14_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/bf23_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/bf56_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/bm14_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/bm23_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-image', stimulus: "img/bm56_nc.jpg", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Humiliate", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Nasty", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Hatred", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Sickening", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Selfish", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Dirty", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Rotten", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Despise", stim_key_association: "left"},
+        {type: 'iat-html', stimulus: "Triumph", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Glorious", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Pleasing", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Delightful", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Terrific", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Friend", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Love", stim_key_association: "right"},
+        {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
+      ],
+      randomize_order: true,
+      repetitions: 1
+    };
+
+    var instructions_block7 = {
+      type: 'html-keyboard-response',
+      stimulus: "<div style='position: absolute; top: 18%; left: 20%'>Press E for:<br>" + "<strong>Bad</strong><br>" + "or<br>" +
+      "<strong>Black People</strong></div>" + "<div style='position: absolute; top: 18%; right: 20%'>Press I for:<br>" + "<strong>Good</strong><br>" + "or<br>" +
+      "<strong>White People</strong></div>" +
+      "<div style='position: relative; top: 42%; margin-left: auto; margin-right: auto'>This is the same as the previous part<br>" +
+      "Use <strong>E</strong> for Bad and for Black People<br>" +
+      "Use <strong>I</strong> for Good and for White People<br>" +
+      "Each item belongs to only one category<br><br>" +
+      "If you make a mistake, a red X will appear. Press the keys listed below " +
+      "to continue. Go as fast as you can while being accurate.<br><br> " +
+      "Press the any key when you are ready to start.</div>"
+    };
+
+  var trial_block7 = {
+    timeline: [
+    {
+      type: jsPsych.timelineVariable('type'),
+      is_html: jsPsych.timelineVariable('is_html'),
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      stim_key_association: jsPsych.timelineVariable('stim_key_association'),
+      html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+      bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+      force_correct_key_press: true,
+      display_feedback: true,
+      trial_duration: 3000, //Only if display_feedback is false
+      left_category_key: 'E',
+      right_category_key: 'I',
+      left_category_label: ['BAD', 'BLACK'],
+      right_category_label: ['GOOD', 'WHITE'],
+      response_ends_trial: true,
+      data: {iat_type: 'bad-black'}
+    }
+    ],
+    timeline_variables: [
+      {type: 'iat-image', stimulus: "img/wf2_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/wf3_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/wf6_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/wm1_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/wm4_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/wm6_nc.jpg", stim_key_association: "right"},
+      {type: 'iat-image', stimulus: "img/bf14_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/bf23_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/bf56_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/bm14_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/bm23_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-image', stimulus: "img/bm56_nc.jpg", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Humiliate", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Nasty", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Hatred", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Sickening", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Selfish", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Dirty", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Rotten", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Despise", stim_key_association: "left"},
+      {type: 'iat-html', stimulus: "Triumph", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Glorious", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Pleasing", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Delightful", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Terrific", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Friend", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Love", stim_key_association: "right"},
+      {type: 'iat-html', stimulus: "Joyous", stim_key_association: "right"}
+    ],
+    randomize_order: true,
+    repetitions: 2
+  };
+
+    var debrief_block = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+        // calculate D-score from https://faculty.washington.edu/agg/pdf/GB&N.JPSP.2003.pdf
+        // first find mean RT
+        var bad_white = jsPsych.data.get().filter({iat_type: 'bad-white'}).filterCustom(function(x) { return x.rt < 10000 });
+        var mean_correct_responses_bad_white = bad_white.filter({correct: true}).select('rt').mean();
+        var bad_black = jsPsych.data.get().filter({iat_type: 'bad-black'}).filterCustom(function(x) { return x.rt < 10000 });
+        var mean_correct_responses_bad_black = bad_black.filter({correct: true}).select('rt').mean();
+
+        // get overall sd
+        var sd = bad_white.join(bad_black).filter({correct: true}).select('rt').sd();
+
+        var d = (mean_correct_responses_bad_black - mean_correct_responses_bad_white) / sd;
+
+        return "<p>You're done! Below is some information about how you performed.</p>"+
+          "<p>When the pairs were BAD/BLACK and GOOD/WHITE, it took you an average of <strong>"+Math.floor(mean_correct_responses_bad_black)+"ms</strong> to respond.</p>"+
+          "<p>When the pairs were BAD/WHITE and GOOD/BLACK, it took you an average of <strong>"+Math.floor(mean_correct_responses_bad_white)+"ms</strong> to respond.</p>"+
+          "<p>Your D score, an index of performance that takes into account this difference and the overall level of variability in your responses, is <strong>"+d.toFixed(2)+"</strong></p>"+
+          "<p>For reference, the Project Implicit IAT website labels D scores above 0.15 as a slight bias, scores above 0.35 as a moderate bias, and scores above 0.65 a strong bias.</p>"
+      }
+    };
+    timeline.push(welcome_block);
+    timeline.push(category_block);
+    timeline.push(instructions_block);
+    timeline.push(trial_block);
+    timeline.push(instructions_block2);
+    timeline.push(trial_block2);
+    timeline.push(instructions_block3);
+    timeline.push(trial_block3);
+    timeline.push(instructions_block4);
+    timeline.push(trial_block4);
+    timeline.push(instructions_block5);
+    timeline.push(trial_block5);
+    timeline.push(instructions_block6);
+    timeline.push(trial_block6);
+    timeline.push(instructions_block7);
+    timeline.push(trial_block7);
+    timeline.push(debrief_block);
+
+    var end_exp = {
+      type: 'html-keyboard-response',
+      stimulus: '<p>This concludes the experiment.</p><p>On the next screen, you will see your entire set of responses. Please copy all of the text and email it to crangel@andrew.cmu.edu.</p><p>Thank you for participating!</p>',
+      post_trial_gap: 2000
+    };
+    timeline.push(end_exp);
+
+  jsPsych.init({
+    timeline: timeline,
+    show_progress_bar: true,
+    use_webaudio: false,
+    preload_audio: [audio_1],
+    on_finish: function(){jsPsych.data.displayData();},
+    default_iti: 500
+  });
+  </script>
+</html>
