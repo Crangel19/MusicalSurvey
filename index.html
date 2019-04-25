@@ -762,8 +762,6 @@ timeline.push(block_two);
     timeline.push(trial_block7);
     timeline.push(debrief_block);
 
-    console.log("Done!");
-
     var end_exp = {
       type: 'html-keyboard-response',
       stimulus: '<p>This concludes the experiment. Thank you for participating!</p><p>Press any key to exit.</p>',
@@ -779,6 +777,8 @@ timeline.push(block_two);
     on_finish: function(){jsPsych.data.displayData();},
     default_iti: 500
   });
+
+      console.log("Done!");
 
   </script>
 </html>
